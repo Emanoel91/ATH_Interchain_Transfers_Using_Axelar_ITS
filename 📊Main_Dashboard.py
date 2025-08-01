@@ -267,6 +267,8 @@ fig3 = px.bar(
     labels={"senders_count": "Number of Senders"}
 )
 fig3.update_layout(barmode="stack")
+    xaxis_title="Date",
+    yaxis_title="Address count"
 
 df_norm = df_timeseries.copy()
 df_norm["total"] = df_norm.groupby("date")["transfers_volume_ath"].transform("sum")
@@ -283,6 +285,8 @@ fig4 = px.bar(
     labels={"share": "Share of Volume"}
 )
 fig4.update_layout(barmode="stack", yaxis_tickformat=".0%")
+    xaxis_title="Date",
+    yaxis_title="% of Volume"
 
 # ردیف اول: دو چارت نخست
 col1, col2 = st.columns(2)
