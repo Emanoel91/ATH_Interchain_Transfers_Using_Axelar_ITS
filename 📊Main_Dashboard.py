@@ -25,10 +25,15 @@ st.markdown(
 # --- Info Box --------------------------------------------------------------------------------------------------------------
 st.markdown(
     """
-    <div style="background-color: #d9fd51; padding: 15px; border-radius: 10px; border: 1px solid #000000;">
-        The AXL token is the native cryptocurrency of the Axelar network, a decentralized blockchain interoperability platform designed to 
-connect multiple blockchains, enabling seamless cross-chain communication and asset transfers. Staking AXL tokens involves locking 
-them in the Axelar network to support its operations and security, in return for earning rewards.
+    <div style="background-color: #d9fd51; padding: 30px; border-radius: 10px; border: 1px solid #000000;">
+        Aethir and Axelar have partnered to enhance the interoperability of Aethir's ATH token across multiple blockchains. 
+        Aethir, a decentralized cloud infrastructure provider focused on gaming and AI, has integrated Axelar as its official 
+        blockchain bridge platform to enable seamless cross-chain bridging of the ATH token between Ethereum mainnet and Arbitrum Layer-2 blockchain. 
+        Axelar’s Interchain Token Service (ITS) supports this by allowing Aethir to deploy ERC-20 tokens across over many blockchains while maintaining 
+        native token functionality. This partnership facilitates frictionless ATH token transfers for Aethir’s ecosystem, particularly for Checker Node 
+        and Aethir Edge rewards (Arbitrum-based) and staking or exchange activities (Ethereum-based). 
+        Axelar’s decentralized network, APIs, and development tools provide scalability and flexibility, enabling Aethir to potentially expand ATH to 
+        additional blockchains. 
     </div>
     """,
     unsafe_allow_html=True
