@@ -16,7 +16,7 @@ st.markdown(
     """
     <div style="display: flex; align-items: center; gap: 15px;">
         <img src="https://img.cryptorank.io/coins/aethir1731483767528.png" alt="Aethir Logo" style="width:60px; height:60px;">
-        <h1 style="margin: 0;">ATH Interchain Transfers Using Axelar ITS</h1>
+        <h1 style="margin: 20;">ATH Interchain Transfers Using Axelar ITS</h1>
     </div>
     """,
     unsafe_allow_html=True
