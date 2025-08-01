@@ -96,10 +96,13 @@ def load_transfer_metrics(start_date, end_date):
     """
     return pd.read_sql(query, conn).iloc[0]
 
+# -- Row 2, 3 -----------------------------
+
 
 # --- Load Data ----------------------------------------------------------------------------------------
 transfer_metrics = load_transfer_metrics(start_date, end_date)
 transfer_metrics.index = transfer_metrics.index.str.lower()
+df_timeseries = load_transfer_timeseries(start_date, end_date, timeframe)
 # ------------------------------------------------------------------------------------------------------
 
 # --- Row 1: Metrics ---
@@ -114,3 +117,110 @@ k2.metric("Volume of Transfers ($USD)", f"${int(transfer_metrics['transfers_volu
 k3.metric("Number of Transfers", f"{int(transfer_metrics['transfers_count']):,}")
 k4.metric("Number of Senders", f"{int(transfer_metrics['senders_count']):,}")
 
+# --- Row 2,3 -------------------------------------------
+
+df_agg = df_timeseries.groupby("date").agg({
+    "transfers_count": "sum",
+    "transfers_volume_usd": "sum"
+}).reset_index()
+
+custom_colors = {
+    "arbitrum➡ethereum": "#cd00fc",
+    "ethereum➡arbitrum": "#d9fd51"
+}
+
+
+fig1 = go.Figure()
+
+for path in df_timeseries["path"].unique():
+    data = df_timeseries[df_timeseries["path"] == path]
+    fig1.add_trace(go.Bar(
+        x=data["date"],
+        y=data["transfers_count"],
+        name=path,
+        marker_color=custom_colors.get(path.lower(), None)
+    ))
+
+# اضافه کردن خط مجموع
+fig1.add_trace(go.Scatter(
+    x=df_agg["date"],
+    y=df_agg["transfers_count"],
+    mode="lines+markers",
+    name="Total Transfers Count",
+    line=dict(color="black", width=3)
+))
+
+fig1.update_layout(
+    barmode="stack",
+    title="📦 Number of Interchain Transfers By Path Over Time",
+    xaxis_title="Date",
+    yaxis_title="Transfers Count"
+)
+
+fig2 = go.Figure()
+
+for path in df_timeseries["path"].unique():
+    data = df_timeseries[df_timeseries["path"] == path]
+    fig2.add_trace(go.Bar(
+        x=data["date"],
+        y=data["transfers_volume_usd"],
+        name=path,
+        marker_color=custom_colors.get(path.lower(), None)
+    ))
+
+# اضافه کردن خط مجموع
+fig2.add_trace(go.Scatter(
+    x=df_agg["date"],
+    y=df_agg["transfers_volume_usd"],
+    mode="lines+markers",
+    name="Total Transfers Volume",
+    line=dict(color="black", width=3)
+))
+
+fig2.update_layout(
+    barmode="stack",
+    title="💰 Volume of Interchain Transfers By Path Over Time",
+    xaxis_title="Date",
+    yaxis_title="Volume ($USD)"
+)
+
+fig3 = px.bar(
+    df_timeseries,
+    x="date",
+    y="senders_count",
+    color="path",
+    title="👤 Number of $ATH Senders Over Time",
+    color_discrete_map=custom_colors,
+    labels={"senders_count": "Number of Senders"}
+)
+fig3.update_layout(barmode="stack")
+
+df_norm = df_timeseries.copy()
+df_norm["total"] = df_norm.groupby("date")["transfers_volume_ath"].transform("sum")
+df_norm["share"] = df_norm["transfers_volume_ath"] / df_norm["total"]
+
+
+fig4 = px.bar(
+    df_norm,
+    x="date",
+    y="share",
+    color="path",
+    title="📊 Share of Each Route from the Total Volume of Transfers",
+    color_discrete_map=custom_colors,
+    labels={"share": "Share of Volume"}
+)
+fig4.update_layout(barmode="stack", yaxis_tickformat=".0%")
+
+# ردیف اول: دو چارت نخست
+col1, col2 = st.columns(2)
+with col1:
+    st.plotly_chart(fig1, use_container_width=True)
+with col2:
+    st.plotly_chart(fig2, use_container_width=True)
+
+# ردیف دوم: دو چارت بعدی
+col3, col4 = st.columns(2)
+with col3:
+    st.plotly_chart(fig3, use_container_width=True)
+with col4:
+    st.plotly_chart(fig4, use_container_width=True)
