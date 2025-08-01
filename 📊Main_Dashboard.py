@@ -14,7 +14,7 @@ st.set_page_config(
 # --- Title with Logo ---------------------------------------------------------------------------------------------------
 st.markdown(
     """
-    <div style="display: flex; align-items: center; gap: 15px;">
+    <div style="display: flex; align-items: center; gap: 50px;">
         <img src="https://img.cryptorank.io/coins/aethir1731483767528.png" alt="Aethir Logo" style="width:60px; height:60px;">
         <h1 style="margin: 0;">ATH Interchain Transfers Using Axelar ITS</h1>
     </div>
