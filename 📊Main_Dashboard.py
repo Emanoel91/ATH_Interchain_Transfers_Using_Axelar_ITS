@@ -97,6 +97,40 @@ def load_transfer_metrics(start_date, end_date):
     return pd.read_sql(query, conn).iloc[0]
 
 # -- Row 2, 3 -----------------------------
+@st.cache_data
+def load_transfer_timeseries(start_date, end_date, timeframe):
+    query = f"""
+        WITH tab1 AS (
+            SELECT
+                created_at,
+                id AS tx_id,
+                data:call.transaction.from::STRING AS sender_address,
+                data:call.returnValues.destinationContractAddress::STRING AS receiver_address,
+                data:amount::FLOAT AS amount,
+                CASE
+                    WHEN created_at::date BETWEEN '2024-06-10' AND '2024-06-12' THEN (data:amount::FLOAT) * 0.084486
+                    ELSE (TRY_CAST(data:value::float AS FLOAT))
+                END AS amount_usd,
+                data:symbol::STRING AS token_symbol,
+                data:call.chain::STRING AS source_chain,
+                data:call.returnValues.destinationChain::STRING AS destination_chain
+            FROM axelar.axelscan.fact_gmp 
+            WHERE data:symbol::STRING = 'ATH'
+              AND created_at::date BETWEEN '{start_date}' AND '{end_date}'
+        )
+        SELECT 
+            DATE_TRUNC('{timeframe}', created_at) AS date,
+            (source_chain || '➡' || destination_chain) AS path,
+            ROUND(SUM(amount)) AS transfers_volume_ath,
+            ROUND(SUM(amount_usd)) AS transfers_volume_usd,
+            COUNT(DISTINCT tx_id) AS transfers_count,
+            COUNT(DISTINCT sender_address) AS senders_count
+        FROM tab1
+        WHERE destination_chain <> 'Moonbeam'
+        GROUP BY 1, 2
+        ORDER BY 1
+    """
+    return pd.read_sql(query, conn)
 
 
 # --- Load Data ----------------------------------------------------------------------------------------
