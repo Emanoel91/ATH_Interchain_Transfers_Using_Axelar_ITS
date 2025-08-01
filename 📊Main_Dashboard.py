@@ -67,57 +67,48 @@ end_date = st.date_input("End Date", value=pd.to_datetime("2025-07-31"))
 # --- Row 1: Total Amounts Staked, Unstaked, and Net Staked ---
 
 @st.cache_data
-def load_staking_totals(start_date, end_date):
+def load_transfer_metrics(start_date, end_date):
     query = f"""
-        WITH delegate AS (
+        WITH tab1 AS (
             SELECT
-                TRUNC(block_timestamp, 'week') AS date,
-                SUM(amount / POW(10, 6)) AS amount_staked
-            FROM axelar.gov.fact_staking
-            WHERE action = 'delegate'
-              AND TX_SUCCEEDED = 'TRUE'
-              AND block_timestamp::date >= '{start_date}'
-              AND block_timestamp::date <= '{end_date}'
-            GROUP BY 1
-        ),
-        undelegate AS (
-            SELECT
-                TRUNC(block_timestamp, 'week') AS date,
-                SUM(amount / POW(10, 6)) AS amount_unstaked
-            FROM axelar.gov.fact_staking
-            WHERE action = 'undelegate'
-              AND TX_SUCCEEDED = 'TRUE'
-              AND block_timestamp::date >= '{start_date}'
-              AND block_timestamp::date <= '{end_date}'
-            GROUP BY 1
-        ),
-        final AS (
-            SELECT a.date,
-                   amount_staked,
-                   amount_unstaked,
-                   amount_staked - amount_unstaked AS net
-            FROM delegate a
-            LEFT OUTER JOIN undelegate b
-              ON a.date = b.date
+                created_at,
+                id AS tx_id,
+                data:call.transaction.from::STRING AS sender_address,
+                data:call.returnValues.destinationContractAddress::STRING AS receiver_address,
+                data:amount::FLOAT AS amount,
+                CASE
+                    WHEN created_at::date BETWEEN '{start_date}' AND '2024-06-12' THEN (data:amount::FLOAT) * 0.084486
+                    ELSE (TRY_CAST(data:value::float AS FLOAT))
+                END AS amount_usd,
+                data:symbol::STRING AS token_symbol,
+                data:call.chain::STRING AS source_chain,
+                data:call.returnValues.destinationChain::STRING AS destination_chain
+            FROM axelar.axelscan.fact_gmp 
+            WHERE data:symbol::STRING = 'ATH'
+              AND created_at::date BETWEEN '{start_date}' AND '{end_date}'
         )
-        SELECT
-            ROUND(SUM(amount_staked), 2) AS total_staked,
-            ROUND(SUM(amount_unstaked), 2) AS total_unstaked,
-            ROUND(SUM(net), 2) AS total_net_staked
-        FROM final
+        SELECT 
+            ROUND(SUM(amount)) AS transfers_volume_ath,
+            ROUND(SUM(amount_usd)) AS transfers_volume_usd,
+            COUNT(DISTINCT tx_id) AS transfers_count,
+            COUNT(DISTINCT sender_address) AS senders_count
+        FROM tab1
     """
     return pd.read_sql(query, conn).iloc[0]
 
 
 # --- Load Data ----------------------------------------------------------------------------------------
-staking_totals = load_staking_totals(start_date, end_date)
+transfer_metrics = load_transfer_metrics(start_date, end_date)
+transfer_metrics.index = transfer_metrics.index.str.lower()
 # ------------------------------------------------------------------------------------------------------
 
 # --- Row 1: Metrics ---
-staking_totals.index = staking_totals.index.str.lower()
+st.markdown("## 🚀 ATH Token Transfer Overview")
 
-col1, col2, col3 = st.columns(3)
-col1.metric("Total Amount Staked", f"{staking_totals['total_staked']:,} AXL")
-col2.metric("Total Amount UnStaked", f"{staking_totals['total_unstaked']:,} AXL")
-col3.metric("Total Amount Net Staked", f"{staking_totals['total_net_staked']:,} AXL")
+k1, k2, k3, k4 = st.columns(4)
+
+k1.metric("Volume of Transfers ($ATH)", f"{transfer_metrics['transfers_volume_ath']:,} ATH")
+k2.metric("Volume of Transfers ($USD)", f"${transfer_metrics['transfers_volume_usd']:,}")
+k3.metric("Number of Transfers", f"{transfer_metrics['transfers_count']:,}")
+k4.metric("Number of Senders", f"{transfer_metrics['senders_count']:,}")
 
