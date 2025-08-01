@@ -264,9 +264,13 @@ fig3 = px.bar(
     color="path",
     title="Number of $ATH Senders Over Time",
     color_discrete_sequence=["#cd00fc", "#d9fd51"],
-    labels={"senders_count": "Number of Senders"}
+    labels={
+        "date": "Date",
+        "senders_count": "Address count"
+    }
 )
 fig3.update_layout(barmode="stack")
+
     
 df_norm = df_timeseries.copy()
 df_norm["total"] = df_norm.groupby("date")["transfers_volume_ath"].transform("sum")
