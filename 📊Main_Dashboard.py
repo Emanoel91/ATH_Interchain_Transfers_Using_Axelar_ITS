@@ -284,7 +284,10 @@ fig4 = px.bar(
     color="path",
     title="Share of Each Route from the Total Volume of Transfers",
     color_discrete_sequence=["#cd00fc", "#d9fd51"],
-    labels={"share": "Share of Volume"}
+    labels={
+        "date": "Date",
+        "share": "% of volume"
+    }
 )
 fig4.update_layout(barmode="stack", yaxis_tickformat=".0%")
     
