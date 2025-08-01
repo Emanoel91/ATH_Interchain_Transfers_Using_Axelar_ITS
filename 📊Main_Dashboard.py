@@ -227,7 +227,7 @@ fig1.update_layout(
     barmode="stack",
     title="Number of Interchain Transfers By Path Over Time",
     xaxis_title="Date",
-    yaxis_title="Transfers Count"
+    yaxis_title="Txns Count"
 )
 
 fig2 = go.Figure()
@@ -254,7 +254,7 @@ fig2.update_layout(
     barmode="stack",
     title="Volume of Interchain Transfers By Path Over Time",
     xaxis_title="Date",
-    yaxis_title="Volume ($USD)"
+    yaxis_title="$USD"
 )
 
 fig3 = px.bar(
@@ -328,7 +328,7 @@ fig_fee_bar.update_layout(
     barmode="stack",
     title="💸 Total Transfer Fees By Path Over Time",
     xaxis_title="Date",
-    yaxis_title="Transfer Fees ($USD)",
+    yaxis_title="$USD",
 )
 fig_fee_avg = go.Figure()
 
@@ -343,9 +343,9 @@ for path in df_fees["path"].unique():
     ))
 
 fig_fee_avg.update_layout(
-    title="📈 Average Transfer Fees By Path Over Time",
+    title="Average Transfer Fees By Path Over Time",
     xaxis_title="Date",
-    yaxis_title="Average Fee ($USD)"
+    yaxis_title="$USD"
 )
 
 col1, col2 = st.columns(2)
