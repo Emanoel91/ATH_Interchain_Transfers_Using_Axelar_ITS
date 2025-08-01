@@ -119,8 +119,8 @@ def load_transfer_timeseries(start_date, end_date, timeframe):
               AND created_at::date BETWEEN '{start_date}' AND '{end_date}'
         )
         SELECT 
-            DATE_TRUNC('{timeframe}', created_at) AS date,
-            (source_chain || '➡' || destination_chain) AS path,
+            DATE_TRUNC('{timeframe}', created_at) AS "date",
+            (source_chain || '➡' || destination_chain) AS "path",
             ROUND(SUM(amount)) AS transfers_volume_ath,
             ROUND(SUM(amount_usd)) AS transfers_volume_usd,
             COUNT(DISTINCT tx_id) AS transfers_count,
