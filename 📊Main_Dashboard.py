@@ -34,8 +34,6 @@ st.markdown(
         and Aethir Edge rewards (Arbitrum-based) and staking or exchange activities (Ethereum-based). 
         Axelar’s decentralized network, APIs, and development tools provide scalability and flexibility, enabling Aethir to potentially expand ATH to 
         additional blockchains. 
-
-        📊Charts initially display data for a default time range. Select a custom range to view results for your desired period.
     </div>
     """,
     unsafe_allow_html=True
