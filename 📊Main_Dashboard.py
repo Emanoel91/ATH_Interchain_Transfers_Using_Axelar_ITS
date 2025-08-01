@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 # --- Page Config: Tab Title & Icon -------------------------------------------------------------------------------------
 st.set_page_config(
     page_title="ATH Interchain Transfers Using Axelar ITS",
-    page_icon="https://img.cryptorank.io/coins/aethir1731483767528.png",
+    page_icon="https://pbs.twimg.com/profile_images/1869486848646537216/rs71wCQo_400x400.jpg",
     layout="wide"
 )
 
