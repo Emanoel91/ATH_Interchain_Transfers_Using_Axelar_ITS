@@ -110,7 +110,7 @@ k1, k2, k3, k4 = st.columns(4)
 volume_b = transfer_metrics['transfers_volume_ath'] / 1_000_000_000  # تبدیل به بیلیارد
 k1.metric("Volume of Transfers ($ATH)", f"{volume_b:.2f} B ATH")
 # -- k1.metric("Volume of Transfers ($ATH)", f"{transfer_metrics['transfers_volume_ath']:,} ATH")
-k2.metric("Volume of Transfers ($USD)", f"${transfer_metrics['transfers_volume_usd']:,}")
-k3.metric("Number of Transfers", f"{transfer_metrics['transfers_count']:,}")
-k4.metric("Number of Senders", f"{transfer_metrics['senders_count']:,}")
+k2.metric("Volume of Transfers ($USD)", f"${int(transfer_metrics['transfers_volume_usd']):,}")
+k3.metric("Number of Transfers", f"{int(transfer_metrics['transfers_count']):,}")
+k4.metric("Number of Senders", f"{int(transfer_metrics['senders_count']):,}")
 
