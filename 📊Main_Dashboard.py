@@ -186,7 +186,7 @@ fig1.add_trace(go.Scatter(
 
 fig1.update_layout(
     barmode="stack",
-    title="📦 Number of Interchain Transfers By Path Over Time",
+    title="Number of Interchain Transfers By Path Over Time",
     xaxis_title="Date",
     yaxis_title="Transfers Count"
 )
@@ -213,7 +213,7 @@ fig2.add_trace(go.Scatter(
 
 fig2.update_layout(
     barmode="stack",
-    title="💰 Volume of Interchain Transfers By Path Over Time",
+    title="Volume of Interchain Transfers By Path Over Time",
     xaxis_title="Date",
     yaxis_title="Volume ($USD)"
 )
@@ -223,8 +223,8 @@ fig3 = px.bar(
     x="date",
     y="senders_count",
     color="path",
-    title="👤 Number of $ATH Senders Over Time",
-    color_discrete_map=custom_colors,
+    title="Number of $ATH Senders Over Time",
+    color_discrete_sequence=["#cd00fc", "#d9fd51"],
     labels={"senders_count": "Number of Senders"}
 )
 fig3.update_layout(barmode="stack")
@@ -239,8 +239,8 @@ fig4 = px.bar(
     x="date",
     y="share",
     color="path",
-    title="📊 Share of Each Route from the Total Volume of Transfers",
-    color_discrete_map=custom_colors,
+    title="Share of Each Route from the Total Volume of Transfers",
+    color_discrete_sequence=["#cd00fc", "#d9fd51"],
     labels={"share": "Share of Volume"}
 )
 fig4.update_layout(barmode="stack", yaxis_tickformat=".0%")
