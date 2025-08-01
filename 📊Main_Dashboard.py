@@ -25,7 +25,7 @@ st.markdown(
 # --- Info Box --------------------------------------------------------------------------------------------------------------
 st.markdown(
     """
-    <div style="background-color: #d9fd51; padding: 30px; border-radius: 10px; border: 1px solid #000000;">
+    <div style="background-color: #d9fd51; padding: 10px; border-radius: 10px; border: 1px solid #000000;">
         Aethir and Axelar have partnered to enhance the interoperability of Aethir's ATH token across multiple blockchains. 
         Aethir, a decentralized cloud infrastructure provider focused on gaming and AI, has integrated Axelar as its official 
         blockchain bridge platform to enable seamless cross-chain bridging of the ATH token between Ethereum mainnet and Arbitrum Layer-2 blockchain. 
