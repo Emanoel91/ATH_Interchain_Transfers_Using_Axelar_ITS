@@ -15,8 +15,8 @@ st.set_page_config(
 st.markdown(
     """
     <div style="display: flex; align-items: center; gap: 15px;">
-        <img src="https://axelarscan.io/logos/chains/axelarnet.svg" alt="Axelar Logo" style="width:60px; height:60px;">
-        <h1 style="margin: 0;">Axelar Staking</h1>
+        <img src="https://img.cryptorank.io/coins/aethir1731483767528.png" alt="Aethir Logo" style="width:60px; height:60px;">
+        <h1 style="margin: 0;">ATH Interchain Transfers Using Axelar ITS</h1>
     </div>
     """,
     unsafe_allow_html=True
