@@ -265,6 +265,25 @@ def load_transfer_table(start_date, end_date):
     """
     return pd.read_sql(query, conn)
 
+# -- Row 7 --------------------------
+@st.cache_data
+def load_weekly_breakdown(start_date, end_date):
+    query = f"""
+        SELECT 
+            CASE 
+                WHEN dayofweek(created_at) = 0 THEN '7 - Sunday'
+                ELSE dayofweek(created_at) || ' - ' || dayname(created_at)
+            END AS "Day Name",
+            ROUND(SUM(data:amount::FLOAT)) AS "Transfers Volume ATH", 
+            COUNT(DISTINCT id) AS "Transfers Count", 
+            COUNT(DISTINCT data:call.transaction.from::STRING) AS "Users Count"
+        FROM axelar.axelscan.fact_gmp
+        WHERE data:symbol::STRING = 'ATH'
+          AND created_at::date BETWEEN '{start_date}' AND '{end_date}'
+        GROUP BY 1
+        ORDER BY 1
+    """
+    return pd.read_sql(query, conn)
 
 # --- Load Data ----------------------------------------------------------------------------------------
 transfer_metrics = load_transfer_metrics(start_date, end_date)
@@ -274,6 +293,7 @@ df_path_summary = load_path_summary(start_date, end_date)
 df_volume_distribution = load_transfer_volume_distribution(start_date, end_date, timeframe)
 df_volume_distribution_total = load_transfer_volume_distribution_total(start_date, end_date)
 transfer_table = load_transfer_table(start_date, end_date)
+weekly_data = load_weekly_breakdown(start_date, end_date)
 # ------------------------------------------------------------------------------------------------------
 
 # --- Row 1: Metrics ---
@@ -558,3 +578,29 @@ st.markdown("### 🔎ATH Interchain Transfers Tracker (Recent Transactions Withi
 # --- Show Table ---
 st.dataframe(transfer_table, use_container_width=True)
 
+# --- Row 7 --------------------------------------------------------
+# --- Plot 1: Bar Chart for Transfers Volume --------------------------------------
+bar_fig = px.bar(
+    weekly_data,
+    x="Day Name",
+    y="Transfers Volume ATH",
+    title="Volume of Interchain Transfers on Different Days of the Week",
+    color_discrete_sequence=["#d9fd51"]
+)
+bar_fig.update_layout(
+    xaxis_title="Day of the Week",
+    yaxis_title="Volume (ATH)",
+    title_x=0.5
+)
+
+# --- Plot 2: Bar-Line Combo for Transfers Count & Users Count ---------------------
+combo_fig = go.Figure()
+
+# Bar for Transfers Count
+combo_fig.add_trace(go.Bar(
+    x=weekly_data["Day Name"],
+    y=weekly_data["Transfers Count"],
+    name="Transfers Count",
+    marker_color="#1f77b4",
+    yaxis="y1"
+))
