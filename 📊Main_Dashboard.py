@@ -283,16 +283,17 @@ fig3 = px.bar(
         "senders_count": "Address count"
     }
 )
-fig3.update_layout(barmode="stack")
+fig3.update_layout(
+    barmode="stack",
     legend=dict(
-        orientation="h",       
-        yanchor="bottom",      
-        y=1.02,                
-        xanchor="center",      
-        x=0.5                  
+        orientation="h",       # نمایش افقی
+        yanchor="bottom",
+        y=1.02,                # کمی بالاتر از نمودار
+        xanchor="center",
+        x=0.5
     )
-
-    
+)
+        
 df_norm = df_timeseries.copy()
 df_norm["total"] = df_norm.groupby("date")["transfers_volume_ath"].transform("sum")
 df_norm["share"] = df_norm["transfers_volume_ath"] / df_norm["total"]
