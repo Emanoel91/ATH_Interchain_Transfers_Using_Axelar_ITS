@@ -579,7 +579,7 @@ st.markdown("### 🔎ATH Interchain Transfers Tracker (Recent Transactions Withi
 st.dataframe(transfer_table, use_container_width=True)
 
 # --- Row 7 --------------------------------------------------------
-# --- Plot 1: Bar Chart for Transfers Volume --------------------------------------
+# --- Chart 1: Bar chart for Transfers Volume ATH ---
 bar_fig = px.bar(
     weekly_data,
     x="Day Name",
@@ -588,60 +588,43 @@ bar_fig = px.bar(
     color_discrete_sequence=["#d9fd51"]
 )
 bar_fig.update_layout(
-    title_text="Volume of Interchain Transfers on Different Days of the Week",
     xaxis_title="Day of the Week",
     yaxis_title="Volume (ATH)",
     bargap=0.2
 )
 
-# --- Plot 2: Bar-Line Combo for Transfers Count & Users Count ---------------------
-combo_fig = go.Figure()
+# --- Chart 2: Clustered Bar Chart for Transfers Count & Users Count ---
+clustered_fig = go.Figure()
 
-# Bar for Transfers Count
-combo_fig.add_trace(go.Bar(
+clustered_fig.add_trace(go.Bar(
     x=weekly_data["Day Name"],
     y=weekly_data["Transfers Count"],
     name="Transfers Count",
-    marker_color="#1f77b4",
-    yaxis="y1"
+    marker_color="#1f77b4"
 ))
 
-# Line for Users Count
-combo_fig.add_trace(go.Scatter(
+clustered_fig.add_trace(go.Bar(
     x=weekly_data["Day Name"],
     y=weekly_data["Users Count"],
     name="Users Count",
-    mode="lines+markers",
-    line=dict(color="#ff7f0e", width=3),
-    yaxis="y2"
+    marker_color="#ff7f0e"
 ))
 
-combo_fig.update_layout(
-    title_text="Number of Interchain Transfers & Senders on Different Days of the Week",
-    xaxis=dict(title="Day of the Week"),
-    yaxis=dict(
-        title="Transfers Count",
-        titlefont=dict(color="#1f77b4"),
-        tickfont=dict(color="#1f77b4"),
-        side="left"
-    ),
-    yaxis2=dict(
-        title="Users Count",
-        titlefont=dict(color="#ff7f0e"),
-        tickfont=dict(color="#ff7f0e"),
-        overlaying="y",
-        side="right"
-    ),
-    legend=dict(x=0.01, y=1),
-    bargap=0.2
+clustered_fig.update_layout(
+    barmode='group',
+    title="Number of Interchain Transfers & Senders on Different Days of the Week",
+    xaxis_title="Day of the Week",
+    yaxis_title="Count",
+    bargap=0.2,
+    legend=dict(x=0.01, y=1)
 )
 
-# --- Display Charts Side by Side ------------------------------------------------
-st.markdown("### 📅 Weekly Patterns of ATH Transfers")
+# --- Display side by side ---
+st.markdown("### 📅 Weekly ATH Transfers Overview")
 col1, col2 = st.columns(2)
 
 with col1:
     st.plotly_chart(bar_fig, use_container_width=True)
 
 with col2:
-    st.plotly_chart(combo_fig, use_container_width=True)
+    st.plotly_chart(clustered_fig, use_container_width=True)
