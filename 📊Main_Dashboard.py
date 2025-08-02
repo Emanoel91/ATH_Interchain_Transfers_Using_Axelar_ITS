@@ -52,6 +52,24 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+# --- Links with Logos ---------------------------------------------------------------------------------------
+st.markdown(
+    """
+    <div style="font-size: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://axelarscan.io/logos/logo.png" alt="Axelar" style="width:20px; height:20px;">
+            <a href="https://www.axelar.network/" target="_blank">https://www.axelar.network/</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968958.png" alt="X" style="width:20px; height:20px;">
+            <a href="https://x.com/axelar" target="_blank">https://x.com/axelar</a>
+        </div>
+        
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 st.info(
     "📊Charts initially display data for a default time range. Select a custom range to view results for your desired period."
 
