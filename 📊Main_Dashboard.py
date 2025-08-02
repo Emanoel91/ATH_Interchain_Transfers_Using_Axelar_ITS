@@ -300,18 +300,17 @@ df_norm["total"] = df_norm.groupby("date")["transfers_volume_ath"].transform("su
 df_norm["share"] = df_norm["transfers_volume_ath"] / df_norm["total"]
 
 
-fig4.update_layout(
-    barmode="stack",
-    yaxis_tickformat=".0%",
-    legend=dict(
-        title_text="",         # حذف عنوان لیجند (path)
-        orientation="h",
-        yanchor="bottom",
-        y=1.02,
-        xanchor="center",
-        x=0.5
-    )
+fig4 = px.bar(
+    df_norm,
+    x="date",
+    y="share",
+    color="path",
+    title="📊 Share of Each Route from the Total Volume of Transfers",
+    color_discrete_map=custom_colors,
+    labels={"share": "Share of Volume"}
 )
+fig4.update_layout(barmode="stack", yaxis_tickformat=".0%")
+
     
 # ردیف اول: دو چارت نخست
 col1, col2 = st.columns(2)
