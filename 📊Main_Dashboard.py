@@ -616,7 +616,14 @@ clustered_fig.update_layout(
     xaxis_title="Day of the Week",
     yaxis_title="Count",
     bargap=0.2,
-    legend=dict(x=0.01, y=1)
+    legend=dict(
+        title_text="",         # حذف عنوان لیجند (path)
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="center",
+        x=0.5
+    )
 )
 
 # --- Display side by side ---
