@@ -338,10 +338,6 @@ with col4:
     st.plotly_chart(fig4, use_container_width=True)
 
 # -- Row 4 --------------------------------------------------
-custom_colors_ = {
-    "arbitrum➡ethereum": "#cd00fc", 
-    "ethereum➡arbitrum": "#d9fd51"
-}
 
 fig_donut1 = px.pie(
     df_path_summary,
@@ -350,7 +346,10 @@ fig_donut1 = px.pie(
     title="🔄 Total Number of Interchain Transfers By Path",
     hole=0.4,
     color="path",
-    color_discrete_map=custom_colors_
+    color_discrete_map={
+        "arbitrum➡ethereum": "#cd00fc",
+        "ethereum➡arbitrum": "#d9fd51"
+    }
 )
 
 fig_donut2 = px.pie(
@@ -360,7 +359,10 @@ fig_donut2 = px.pie(
     title="💰 Total Volume of Interchain Transfers By Path ($ATH)",
     hole=0.4,
     color="path",
-    color_discrete_map=custom_colors_
+    color_discrete_map={
+        "arbitrum➡ethereum": "#cd00fc",
+        "ethereum➡arbitrum": "#d9fd51"
+    }
 )
 
 fig_donut3 = px.pie(
@@ -370,7 +372,10 @@ fig_donut3 = px.pie(
     title="💵 Total Volume of Interchain Transfers By Path ($USD)",
     hole=0.4,
     color="path",
-    color_discrete_map=custom_colors_
+    color_discrete_map={
+        "arbitrum➡ethereum": "#cd00fc",
+        "ethereum➡arbitrum": "#d9fd51"
+    }
 )
 
 col1, col2, col3 = st.columns(3)
