@@ -135,7 +135,7 @@ def load_transfer_timeseries(start_date, end_date, timeframe):
 # -- Row 4 ---------------------------
 
 @st.cache_data
-def load_transfer_fees(start_date, end_date, timeframe):
+def load_path_summary(start_date, end_date):
     query = f"""
         WITH tab1 AS (
             SELECT
@@ -152,29 +152,26 @@ def load_transfer_fees(start_date, end_date, timeframe):
                 data:symbol::STRING AS token_symbol,
                 data:call.chain::STRING AS source_chain,
                 data:call.returnValues.destinationChain::STRING AS destination_chain
-            FROM axelar.axelscan.fact_gmp
+            FROM axelar.axelscan.fact_gmp 
             WHERE data:symbol::STRING = 'ATH'
               AND created_at::date BETWEEN '{start_date}' AND '{end_date}'
         )
         SELECT 
-            DATE_TRUNC('{timeframe}', created_at) AS "date",
             (source_chain || '➡' || destination_chain) AS "path",
-            ROUND(SUM(fee)) AS "transfer_fees",
-            ROUND(AVG(fee), 3) AS "avg_fees"
+            ROUND(SUM(amount)) AS "transfers_volume_ath",
+            ROUND(SUM(amount_usd)) AS "transfers_volume_usd",
+            COUNT(DISTINCT tx_id) AS "transfers_count"
         FROM tab1
         WHERE destination_chain <> 'Moonbeam'
-        GROUP BY 1, 2
-        ORDER BY 1
+        GROUP BY 1
     """
     return pd.read_sql(query, conn)
-
 
 # --- Load Data ----------------------------------------------------------------------------------------
 transfer_metrics = load_transfer_metrics(start_date, end_date)
 transfer_metrics.index = transfer_metrics.index.str.lower()
 df_timeseries = load_transfer_timeseries(start_date, end_date, timeframe)
-df_fees = load_transfer_fees(start_date, end_date, timeframe)
-df_total_fees = df_fees.groupby("date").agg({"transfer_fees": "sum"}).reset_index()
+df_path_summary = load_path_summary(start_date, end_date)
 
 # ------------------------------------------------------------------------------------------------------
 
@@ -345,56 +342,44 @@ custom_colors = {
     "arbitrum➡ethereum": "#cd00fc",
     "ethereum➡arbitrum": "#d9fd51"
 }
-fig_fee_bar = go.Figure()
 
-# بارها به تفکیک مسیر
-for path in df_fees["path"].unique():
-    df_path = df_fees[df_fees["path"] == path]
-    fig_fee_bar.add_trace(go.Bar(
-        x=df_path["date"],
-        y=df_path["transfer_fees"],
-        name=path,
-        marker_color=custom_colors.get(path.lower(), None)
-    ))
-
-# خط مجموع کل کارمزدها
-fig_fee_bar.add_trace(go.Scatter(
-    x=df_total_fees["date"],
-    y=df_total_fees["transfer_fees"],
-    mode="lines+markers",
-    name="Total Transfer Fees",
-    line=dict(color="black", width=3)
-))
-
-fig_fee_bar.update_layout(
-    barmode="stack",
-    title="💸 Total Transfer Fees By Path Over Time",
-    xaxis_title="Date",
-    yaxis_title="$USD",
-)
-fig_fee_avg = go.Figure()
-
-for path in df_fees["path"].unique():
-    df_path = df_fees[df_fees["path"] == path]
-    fig_fee_avg.add_trace(go.Scatter(
-        x=df_path["date"],
-        y=df_path["avg_fees"],
-        mode="lines+markers",
-        name=path,
-        line=dict(color=custom_colors.get(path.lower(), None), width=3)
-    ))
-
-fig_fee_avg.update_layout(
-    title="Average Transfer Fees By Path Over Time",
-    xaxis_title="Date",
-    yaxis_title="$USD"
+fig_donut1 = px.pie(
+    df_path_summary,
+    names="path",
+    values="transfers_count",
+    title="🔄 Total Number of Interchain Transfers By Path",
+    hole=0.4,
+    color="path",
+    color_discrete_map=custom_colors
 )
 
-col1, col2 = st.columns(2)
+fig_donut2 = px.pie(
+    df_path_summary,
+    names="path",
+    values="transfers_volume_ath",
+    title="💰 Total Volume of Interchain Transfers By Path ($ATH)",
+    hole=0.4,
+    color="path",
+    color_discrete_map=custom_colors
+)
+
+fig_donut3 = px.pie(
+    df_path_summary,
+    names="path",
+    values="transfers_volume_usd",
+    title="💵 Total Volume of Interchain Transfers By Path ($USD)",
+    hole=0.4,
+    color="path",
+    color_discrete_map=custom_colors
+)
+
+col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.plotly_chart(fig_fee_bar, use_container_width=True)
+    st.plotly_chart(fig_donut1, use_container_width=True)
 
 with col2:
-    st.plotly_chart(fig_fee_avg, use_container_width=True)
+    st.plotly_chart(fig_donut2, use_container_width=True)
 
+with col3:
+    st.plotly_chart(fig_donut3, use_container_width=True)
