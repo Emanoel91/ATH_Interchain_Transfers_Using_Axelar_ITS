@@ -309,7 +309,7 @@ k3.metric("Number of Transfers", f"{int(transfer_metrics['transfers_count']):,}"
 k4.metric("Number of Senders", f"{int(transfer_metrics['senders_count']):,}")
 
 # --- Row 2,3 -------------------------------------------
-
+st.markdown("### 📊 ATH Token Transfer Over Time")
 df_agg = df_timeseries.groupby("date").agg({
     "transfers_count": "sum",
     "transfers_volume_usd": "sum"
@@ -627,7 +627,7 @@ clustered_fig.update_layout(
 )
 
 # --- Display side by side ---
-st.markdown("### 📅 ATH Interchain Transfers Pattern")
+st.markdown("### 📅 ATH Interchain Transfer Pattern")
 col1, col2 = st.columns(2)
 
 with col1:
