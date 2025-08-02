@@ -579,7 +579,7 @@ st.markdown("### 🔎ATH Interchain Transfers Tracker (Recent Transactions Withi
 st.dataframe(transfer_table, use_container_width=True)
 
 # --- Row 7 --------------------------------------------------------
-# --- Plot 1: Bar Chart for Transfers Volume --------------------------------------
+# --- Plot 1: Bar Chart for Transfers Volume -----------------------
 bar_fig = px.bar(
     weekly_data,
     x="Day Name",
