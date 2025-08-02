@@ -223,6 +223,48 @@ def load_transfer_volume_distribution_total(start_date, end_date):
     """
     return pd.read_sql(query, conn)
 
+# -- Row 6 ----------------------------------------------
+@st.cache_data
+def load_ath_interchain_transfers(start_date, end_date):
+    query = f"""
+        WITH tab1 AS (
+            SELECT
+                created_at,
+                id AS tx_id,
+                data:call.transaction.from::STRING AS sender_address,
+                data:call.returnValues.destinationContractAddress::STRING AS receiver_address,
+                data:amount::FLOAT AS amount,
+                CASE
+                    WHEN created_at::date >= '2024-06-10' AND created_at::date <= '2024-06-12' THEN (data:amount::FLOAT) * 0.084486
+                    ELSE (TRY_CAST(data:value::float AS FLOAT))
+                END AS amount_usd,
+                COALESCE(
+                    ((data:gas:gas_used_amount) * (data:gas_price_rate:source_token.token_price.usd)),
+                    TRY_CAST(data:fees:express_fee_usd::float AS FLOAT)
+                ) AS fee,
+                data:symbol::STRING AS token_symbol,
+                data:call.chain::STRING AS source_chain,
+                data:call.returnValues.destinationChain::STRING AS destination_chain
+            FROM axelar.axelscan.fact_gmp 
+            WHERE data:symbol::STRING = 'ATH'
+              AND created_at::date BETWEEN '{start_date}' AND '{end_date}'
+        )
+        SELECT
+            created_at AS "⏰Date",
+            ROUND(amount, 2) AS "💸Amount ATH",
+            ROUND(amount_usd, 2) AS "💰Amount USD",
+            source_chain AS "📤Source Chain",
+            destination_chain AS "📥Destination Chain ",
+            sender_address AS "👥Sender",
+            ROUND(fee, 3) AS "⛽Fee USD",
+            tx_id AS "🔗TX ID"
+        FROM tab1
+        WHERE destination_chain <> 'Moonbeam'
+        ORDER BY created_at DESC
+        LIMIT 1000
+    """
+    return pd.read_sql(query, conn)
+
 
 # --- Load Data ----------------------------------------------------------------------------------------
 transfer_metrics = load_transfer_metrics(start_date, end_date)
@@ -505,3 +547,13 @@ with col1:
 
 with col2:
     st.plotly_chart(fig_donut_volume, use_container_width=True)
+
+# -- Row 6 -----------------------------------------
+
+df = run_query_with_date_filter(start_date, end_date)  # تابعی که کوئری بالا را اجرا می‌کند
+
+df.index = df.index + 1
+
+st.markdown("### 🔎 ATH Interchain Transfers Tracker (Recent Transactions Within the Default Time Frame)")
+
+st.dataframe(df)
