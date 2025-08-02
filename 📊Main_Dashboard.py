@@ -339,7 +339,7 @@ with col4:
 
 # -- Row 4 --------------------------------------------------
 custom_colors = {
-    "arbitrum➡ethereum": "#cd00fc",
+    "arbitrum➡ethereum": "#cd00fc", 
     "ethereum➡arbitrum": "#d9fd51"
 }
 
