@@ -284,6 +284,13 @@ fig3 = px.bar(
     }
 )
 fig3.update_layout(barmode="stack")
+    legend=dict(
+        orientation="h",       
+        yanchor="bottom",      
+        y=1.02,                
+        xanchor="center",      
+        x=0.5                  
+    )
 
     
 df_norm = df_timeseries.copy()
