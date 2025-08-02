@@ -167,11 +167,70 @@ def load_path_summary(start_date, end_date):
     """
     return pd.read_sql(query, conn)
 
+# -- Row 5 -----------------------------------------------------
+@st.cache_data
+def load_transfer_volume_distribution(start_date, end_date, timeframe):
+    query = f"""
+        WITH tab1 AS (
+            SELECT
+                created_at AS date,
+                id,
+                CASE
+                    WHEN sum(data:amount::FLOAT) <= 100 THEN 'V<=100 ATH'
+                    WHEN sum(data:amount::FLOAT) > 100 AND sum(data:amount::FLOAT) <= 1000 THEN '100<V<=1k ATH'
+                    WHEN sum(data:amount::FLOAT) > 1000 AND sum(data:amount::FLOAT) <= 10000 THEN '1k<V<=10k ATH'
+                    WHEN sum(data:amount::FLOAT) > 10000 AND sum(data:amount::FLOAT) <= 20000 THEN '10k<V<=20k ATH'
+                    WHEN sum(data:amount::FLOAT) > 20000 AND sum(data:amount::FLOAT) <= 50000 THEN '20k<V<=50k ATH'
+                    WHEN sum(data:amount::FLOAT) > 50000 AND sum(data:amount::FLOAT) <= 100000 THEN '50k<V<=100k ATH'
+                    WHEN sum(data:amount::FLOAT) > 100000 THEN 'V>100k ATH'
+                END AS "Class"
+            FROM axelar.axelscan.fact_gmp 
+            WHERE data:symbol::STRING = 'ATH'
+              AND created_at::date BETWEEN '{start_date}' AND '{end_date}'
+            GROUP BY 1,2
+        )
+        SELECT date_trunc('{timeframe}', date) AS "Date", "Class", COUNT(DISTINCT id) AS "Transfers Count"
+        FROM tab1
+        GROUP BY 1,2
+        ORDER BY 1
+    """
+    return pd.read_sql(query, conn)
+# --------------------------------------------
+@st.cache_data
+def load_transfer_volume_distribution_total(start_date, end_date):
+    query = f"""
+        WITH tab1 AS (
+            SELECT
+                created_at AS date,
+                id,
+                CASE
+                    WHEN sum(data:amount::FLOAT) <= 100 THEN 'V<=100 ATH'
+                    WHEN sum(data:amount::FLOAT) > 100 AND sum(data:amount::FLOAT) <= 1000 THEN '100<V<=1k ATH'
+                    WHEN sum(data:amount::FLOAT) > 1000 AND sum(data:amount::FLOAT) <= 10000 THEN '1k<V<=10k ATH'
+                    WHEN sum(data:amount::FLOAT) > 10000 AND sum(data:amount::FLOAT) <= 20000 THEN '10k<V<=20k ATH'
+                    WHEN sum(data:amount::FLOAT) > 20000 AND sum(data:amount::FLOAT) <= 50000 THEN '20k<V<=50k ATH'
+                    WHEN sum(data:amount::FLOAT) > 50000 AND sum(data:amount::FLOAT) <= 100000 THEN '50k<V<=100k ATH'
+                    WHEN sum(data:amount::FLOAT) > 100000 THEN 'V>100k ATH'
+                END AS "Class"
+            FROM axelar.axelscan.fact_gmp 
+            WHERE data:symbol::STRING = 'ATH'
+              AND created_at::date BETWEEN '{start_date}' AND '{end_date}'
+            GROUP BY 1,2
+        )
+        SELECT "Class", COUNT(DISTINCT id) AS "Transfers Count"
+        FROM tab1
+        GROUP BY 1
+    """
+    return pd.read_sql(query, conn)
+
+
 # --- Load Data ----------------------------------------------------------------------------------------
 transfer_metrics = load_transfer_metrics(start_date, end_date)
 transfer_metrics.index = transfer_metrics.index.str.lower()
 df_timeseries = load_transfer_timeseries(start_date, end_date, timeframe)
 df_path_summary = load_path_summary(start_date, end_date)
+df_volume_distribution = load_transfer_volume_distribution(start_date, end_date, timeframe)
+df_volume_distribution_total = load_transfer_volume_distribution_total(start_date, end_date)
 
 # ------------------------------------------------------------------------------------------------------
 
@@ -379,3 +438,70 @@ with col2:
 
 with col3:
     st.plotly_chart(fig_donut3, use_container_width=True)
+
+# --- Row 5 --------------------------------------------------------
+color_scale = {
+    'V<=100 ATH': '#d9fd51',        # lime-ish
+    '100<V<=1k ATH': '#b1f85a',
+    '1k<V<=10k ATH': '#8be361',
+    '10k<V<=20k ATH': '#639d55',
+    '20k<V<=50k ATH': '#4a7c42',
+    '50k<V<=100k ATH': '#7a4c89',  # purple-ish
+    'V>100k ATH': '#cd00fc'
+}
+fig_norm_stacked = px.bar(
+    df_volume_distribution,
+    x="Date",
+    y="Transfers Count",
+    color="Class",
+    title="Distribution of Interchain Transfers Based on Volume Over Time",
+    color_discrete_map=color_scale,
+    text="Transfers Count",
+)
+
+fig_norm_stacked.update_layout(barmode='stack', uniformtext_minsize=8, uniformtext_mode='hide')
+fig_norm_stacked.update_traces(textposition='inside')
+
+# نرمالایز کردن محور y (100% stacked bar)
+fig_norm_stacked.update_layout(yaxis=dict(tickformat='%'))
+fig_norm_stacked.update_traces(hovertemplate='%{y} Transfers<br>%{x}<br>%{color}')
+
+# نرمالایز کردن مقدارها
+df_norm = df_volume_distribution.copy()
+df_norm['total_per_date'] = df_norm.groupby('Date')['Transfers Count'].transform('sum')
+df_norm['normalized'] = df_norm['Transfers Count'] / df_norm['total_per_date']
+
+fig_norm_stacked = px.bar(
+    df_norm,
+    x='Date',
+    y='normalized',
+    color='Class',
+    title="Distribution of Interchain Transfers Based on Volume Over Time",
+    color_discrete_map=color_scale,
+    text=df_norm['Transfers Count'].astype(str),
+)
+
+fig_norm_stacked.update_layout(barmode='stack')
+fig_norm_stacked.update_traces(textposition='inside')
+fig_norm_stacked.update_yaxes(tickformat='%')
+
+fig_donut_volume = px.pie(
+    df_volume_distribution_total,
+    names="Class",
+    values="Transfers Count",
+    title="Distribution of Interchain Transfers Based on Volume",
+    hole=0.5,
+    color="Class",
+    color_discrete_map=color_scale
+)
+
+fig_donut_volume.update_traces(textposition='outside', textinfo='percent+label', pull=[0.05]*len(df_volume_distribution_total))
+fig_donut_volume.update_layout(showlegend=True, legend=dict(orientation="v", y=0.5, x=1.1))
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.plotly_chart(fig_norm_stacked, use_container_width=True)
+
+with col2:
+    st.plotly_chart(fig_donut_volume, use_container_width=True)
