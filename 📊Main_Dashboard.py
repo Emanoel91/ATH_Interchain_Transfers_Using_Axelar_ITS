@@ -651,7 +651,8 @@ with col2:
 
 
 # --- Links with Logos ---------------------------------------------------------------------------------------
-st.markdown(
+st.info(
+    st.markdown(
     """
     <div style="font-size: 16px;">
         <div style="display: flex; align-items: center; gap: 10px;">
@@ -674,3 +675,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+)
+
