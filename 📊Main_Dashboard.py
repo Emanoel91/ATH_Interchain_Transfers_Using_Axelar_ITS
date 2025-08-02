@@ -306,10 +306,24 @@ fig4 = px.bar(
     y="share",
     color="path",
     title="📊 Share of Each Route from the Total Volume of Transfers",
-    color_discrete_map=custom_colors,
-    labels={"share": "Share of Volume"}
+    color_discrete_sequence=["#cd00fc", "#d9fd51"],
+    labels={
+        "date": "Date",
+        "sender": "% of Volume"
+    }
 )
-fig4.update_layout(barmode="stack", yaxis_tickformat=".0%")
+fig4.update_layout(
+    barmode="stack",
+    yaxis_tickformat=".0%",
+    legend=dict(
+        title_text="",         # حذف عنوان لیجند (path)
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="center",
+        x=0.5
+    )
+)
 
     
 # ردیف اول: دو چارت نخست
