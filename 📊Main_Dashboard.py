@@ -616,7 +616,10 @@ combo_fig.add_trace(go.Scatter(
 ))
 
 combo_fig.update_layout(
-    title="Number of Interchain Transfers & Senders on Different Days of the Week",
+    title=dict(
+        text="Number of Interchain Transfers & Senders on Different Days of the Week",
+        x=0.5
+    ),
     xaxis=dict(title="Day of the Week"),
     yaxis=dict(
         title="Transfers Count",
@@ -632,9 +635,9 @@ combo_fig.update_layout(
         side="right"
     ),
     legend=dict(x=0.01, y=1),
-    bargap=0.2,
-    title_x=0.5
+    bargap=0.2
 )
+
 
 # --- Display Charts Side by Side ------------------------------------------------
 st.markdown("### 📅 Weekly Patterns of ATH Transfers")
