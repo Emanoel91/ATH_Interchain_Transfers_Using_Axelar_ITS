@@ -305,11 +305,11 @@ fig4 = px.bar(
     x="date",
     y="share",
     color="path",
-    title="📊 Share of Each Route from the Total Volume of Transfers",
+    title="Share of Each Route from the Total Volume of Transfers",
     color_discrete_sequence=["#cd00fc", "#d9fd51"],
     labels={
         "date": "Date",
-        "sender": "% of Volume"
+        "share": "% of Volume"
     }
 )
 fig4.update_layout(
