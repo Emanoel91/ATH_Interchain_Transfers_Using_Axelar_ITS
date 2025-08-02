@@ -373,7 +373,7 @@ fig_donut3 = px.pie(
     hole=0.4,
     color="path",
     color_discrete_map={
-        "arbitrum➡ethereum": "#cd00fc",
+        "arbitrum➡ethereum": "#0ed145",
         "ethereum➡arbitrum": "#d9fd51"
     }
 )
