@@ -227,7 +227,7 @@ fig1.update_layout(
     barmode="stack",
     title="Number of Interchain Transfers By Path Over Time",
     xaxis_title="Date",
-    yaxis_title="Txns Count"
+    yaxis_title="Txns Count",
     legend=dict(
         orientation="h",       # افقی کردن لیجند
         yanchor="bottom",      # مرجع عمودی در پایین باشد
