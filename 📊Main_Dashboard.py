@@ -261,7 +261,14 @@ fig2.update_layout(
     barmode="stack",
     title="Volume of Interchain Transfers By Path Over Time",
     xaxis_title="Date",
-    yaxis_title="$USD"
+    yaxis_title="$USD",
+    legend=dict(
+        orientation="h",       
+        yanchor="bottom",      
+        y=1.02,                
+        xanchor="center",      
+        x=0.5                  
+    )
 )
 
 fig3 = px.bar(
