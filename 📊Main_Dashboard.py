@@ -604,3 +604,44 @@ combo_fig.add_trace(go.Bar(
     marker_color="#1f77b4",
     yaxis="y1"
 ))
+
+# Line for Users Count
+combo_fig.add_trace(go.Scatter(
+    x=weekly_data["Day Name"],
+    y=weekly_data["Users Count"],
+    name="Users Count",
+    mode="lines+markers",
+    line=dict(color="#ff7f0e", width=3),
+    yaxis="y2"
+))
+
+combo_fig.update_layout(
+    title="Number of Interchain Transfers & Senders on Different Days of the Week",
+    xaxis=dict(title="Day of the Week"),
+    yaxis=dict(
+        title="Transfers Count",
+        titlefont=dict(color="#1f77b4"),
+        tickfont=dict(color="#1f77b4"),
+        side="left"
+    ),
+    yaxis2=dict(
+        title="Users Count",
+        titlefont=dict(color="#ff7f0e"),
+        tickfont=dict(color="#ff7f0e"),
+        overlaying="y",
+        side="right"
+    ),
+    legend=dict(x=0.01, y=1),
+    bargap=0.2,
+    title_x=0.5
+)
+
+# --- Display Charts Side by Side ------------------------------------------------
+st.markdown("### 📅 Weekly Patterns of ATH Transfers")
+col1, col2 = st.columns(2)
+
+with col1:
+    st.plotly_chart(bar_fig, use_container_width=True)
+
+with col2:
+    st.plotly_chart(combo_fig, use_container_width=True)
