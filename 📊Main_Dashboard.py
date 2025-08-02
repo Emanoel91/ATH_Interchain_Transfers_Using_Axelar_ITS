@@ -650,4 +650,32 @@ with col2:
     st.plotly_chart(clustered_fig, use_container_width=True)
 
 
-# --- Links with Logos ---------------------------------------------------------------------------------------
+# --- Reference and Rebuild Info ---
+st.markdown(
+    """
+    <div style="margin-top: 20px; margin-bottom: 20px; font-size: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://pbs.twimg.com/profile_images/1856738793325268992/OouKI10c_400x400.jpg" alt="Flipside" style="width:25px; height:25px; border-radius: 50%;">
+            <span>Data Powered by: <a href="https://flipsidecrypto.xyz/home/" target="_blank">Flipside</a></span>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# --- Links with Logos ---
+st.markdown(
+    """
+    <div style="font-size: 16px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://axelarscan.io/logos/logo.png" alt="Axelar" style="width:20px; height:20px;">
+            <a href="https://www.axelar.network/" target="_blank">Axelar Website</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="https://axelarscan.io/logos/logo.png" alt="X" style="width:20px; height:20px;">
+            <a href="https://x.com/axelar" target="_blank">Axelar X Account</a>
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
