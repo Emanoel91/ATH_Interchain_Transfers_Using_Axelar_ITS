@@ -372,10 +372,7 @@ fig_donut3 = px.pie(
     title="💵 Total Volume of Interchain Transfers By Path ($USD)",
     hole=0.4,
     color="path",
-    color_discrete_map={
-        "arbitrum➡ethereum": "#0ed145",
-        "ethereum➡arbitrum": "#d9fd51"
-    }
+    color_discrete_sequence=["#cd00fc", "#d9fd51"]
 )
 
 col1, col2, col3 = st.columns(3)
