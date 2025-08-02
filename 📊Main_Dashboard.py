@@ -588,8 +588,8 @@ bar_fig = px.bar(
     color_discrete_sequence=["#d9fd51"]
 )
 bar_fig.update_layout(
-    xaxis_title="Day of the Week",
-    yaxis_title="Volume (ATH)",
+    xaxis_title=" ",
+    yaxis_title="$ATH",
     bargap=0.2
 )
 
@@ -613,8 +613,8 @@ clustered_fig.add_trace(go.Bar(
 clustered_fig.update_layout(
     barmode='group',
     title="Number of Interchain Transfers & Senders on Different Days of the Week",
-    xaxis_title="Day of the Week",
-    yaxis_title="Count",
+    xaxis_title=" ",
+    yaxis_title=" ",
     bargap=0.2,
     legend=dict(
         title_text="",         # حذف عنوان لیجند (path)
@@ -627,7 +627,7 @@ clustered_fig.update_layout(
 )
 
 # --- Display side by side ---
-st.markdown("### 📅 Weekly ATH Transfers Overview")
+st.markdown("### 📅 ATH Interchain Transfers Pattern")
 col1, col2 = st.columns(2)
 
 with col1:
