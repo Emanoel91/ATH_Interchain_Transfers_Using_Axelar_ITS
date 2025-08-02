@@ -346,10 +346,7 @@ fig_donut1 = px.pie(
     title="🔄 Total Number of Interchain Transfers By Path",
     hole=0.4,
     color="path",
-    color_discrete_map={
-        "arbitrum➡ethereum": "#cd00fc",
-        "ethereum➡arbitrum": "#d9fd51"
-    }
+    color_discrete_sequence=["#cd00fc", "#d9fd51"]
 )
 
 fig_donut2 = px.pie(
@@ -359,10 +356,7 @@ fig_donut2 = px.pie(
     title="💰 Total Volume of Interchain Transfers By Path ($ATH)",
     hole=0.4,
     color="path",
-    color_discrete_map={
-        "arbitrum➡ethereum": "#cd00fc",
-        "ethereum➡arbitrum": "#d9fd51"
-    }
+    color_discrete_sequence=["#cd00fc", "#d9fd51"]
 )
 
 fig_donut3 = px.pie(
