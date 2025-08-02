@@ -58,11 +58,11 @@ st.markdown(
     <div style="font-size: 16px;">
         <div style="display: flex; align-items: center; gap: 10px;">
             <img src="https://axelarscan.io/logos/logo.png" alt="Axelar" style="width:20px; height:20px;">
-            <a href="https://www.axelar.network/" target="_blank">https://www.axelar.network/</a>
+            <a href="https://www.axelar.network/" target="_blank">Axelar Website</a>
         </div>
         <div style="display: flex; align-items: center; gap: 10px;">
-            <img src="https://cdn-icons-png.flaticon.com/512/5968/5968958.png" alt="X" style="width:20px; height:20px;">
-            <a href="https://x.com/axelar" target="_blank">https://x.com/axelar</a>
+            <img src="https://axelarscan.io/logos/logo.png" alt="Axelar X" style="width:20px; height:20px;">
+            <a href="https://x.com/axelar" target="_blank">Axelar X Account</a>
         </div>
         
     </div>
