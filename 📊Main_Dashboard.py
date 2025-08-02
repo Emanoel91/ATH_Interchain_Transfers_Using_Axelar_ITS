@@ -588,9 +588,10 @@ bar_fig = px.bar(
     color_discrete_sequence=["#d9fd51"]
 )
 bar_fig.update_layout(
+    title_text="Volume of Interchain Transfers on Different Days of the Week",
     xaxis_title="Day of the Week",
     yaxis_title="Volume (ATH)",
-    title_x=0.5
+    bargap=0.2
 )
 
 # --- Plot 2: Bar-Line Combo for Transfers Count & Users Count ---------------------
@@ -616,10 +617,7 @@ combo_fig.add_trace(go.Scatter(
 ))
 
 combo_fig.update_layout(
-    title=dict(
-        text="Number of Interchain Transfers & Senders on Different Days of the Week",
-        x=0.5
-    ),
+    title_text="Number of Interchain Transfers & Senders on Different Days of the Week",
     xaxis=dict(title="Day of the Week"),
     yaxis=dict(
         title="Transfers Count",
