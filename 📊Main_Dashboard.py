@@ -653,24 +653,29 @@ with col2:
 # --- Links with Logos ---------------------------------------------------------------------------------------
 st.markdown(
     """
-    <div style="font-size: 16px; padding: 10px; border-radius: 5px;">
-        <div style="display: flex; align-items: center; gap: 30px;">
+    <div style="font-size: 16px;">
+        <div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap;">
+        
             <div style="display: flex; align-items: center; gap: 10px;">
                 <img src="https://axelarscan.io/logos/logo.png" alt="Axelar" style="width:20px; height:20px;">
-                <a href="https://www.axelar.network/" target="_blank" style="color: #fff;">Axelar Website</a>
+                <a href="https://www.axelar.network/" target="_blank">Axelar Website</a>
             </div>
+            
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="https://axelarscan.io/logos/logo.png" alt="Axelar X" style="width:20px; height:20px;">
-                <a href="https://x.com/axelar" target="_blank" style="color: #fff;">Axelar X Account</a>
+                <img src="https://axelarscan.io/logos/logo.png" alt="Axelar" style="width:20px; height:20px;">
+                <a href="https://x.com/axelar" target="_blank">Axelar X Account</a>
             </div>
+
             <div style="display: flex; align-items: center; gap: 10px;">
                 <img src="https://img.cryptorank.io/coins/aethir1731483767528.png" alt="Aethir" style="width:20px; height:20px;">
-                <a href="https://aethir.com/" target="_blank" style="color: #fff;">Aethir Website</a>
+                <a href="https://aethir.com/" target="_blank">Aethir Website</a>
             </div>
+            
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="https://img.cryptorank.io/coins/aethir1731483767528.png" alt="Aethir X" style="width:20px; height:20px;">
-                <a href="https://x.com/AethirCloud" target="_blank" style="color: #fff;">Aethir X Account</a>
+                <img src="https://img.cryptorank.io/coins/aethir1731483767528.png" alt="Aethir" style="width:20px; height:20px;">
+                <a href="https://x.com/AethirCloud" target="_blank">Aethir X Account</a>
             </div>
+        
         </div>
     </div>
     """,
