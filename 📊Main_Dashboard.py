@@ -653,7 +653,7 @@ with col2:
 # --- Links with Logos ---------------------------------------------------------------------------------------
 st.markdown(
     """
-    <div style="font-size: 16px; background-color: #ffa567; color: #000; padding: 10px; border-radius: 5px;">
+    <div style="font-size: 16px; padding: 10px; border-radius: 5px;">
         <div style="display: flex; align-items: center; gap: 30px;">
             <div style="display: flex; align-items: center; gap: 10px;">
                 <img src="https://axelarscan.io/logos/logo.png" alt="Axelar" style="width:20px; height:20px;">
