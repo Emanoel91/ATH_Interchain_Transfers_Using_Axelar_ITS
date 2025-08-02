@@ -600,14 +600,14 @@ clustered_fig.add_trace(go.Bar(
     x=weekly_data["Day Name"],
     y=weekly_data["Transfers Count"],
     name="Transfers Count",
-    marker_color="#1f77b4"
+    marker_color="#d9fd51"
 ))
 
 clustered_fig.add_trace(go.Bar(
     x=weekly_data["Day Name"],
     y=weekly_data["Users Count"],
     name="Users Count",
-    marker_color="#ff7f0e"
+    marker_color="#cd00fc"
 ))
 
 clustered_fig.update_layout(
