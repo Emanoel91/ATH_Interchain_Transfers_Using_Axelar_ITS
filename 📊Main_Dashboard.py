@@ -343,7 +343,7 @@ fig_donut1 = px.pie(
     df_path_summary,
     names="path",
     values="transfers_count",
-    title="🔄 Total Number of Interchain Transfers By Path",
+    title="Total Number of Interchain Transfers By Path",
     hole=0.4,
     color="path",
     color_discrete_sequence=["#cd00fc", "#d9fd51"]
@@ -353,7 +353,7 @@ fig_donut2 = px.pie(
     df_path_summary,
     names="path",
     values="transfers_volume_ath",
-    title="💰 Total Volume of Interchain Transfers By Path ($ATH)",
+    title="Total Volume of Interchain Transfers By Path ($ATH)",
     hole=0.4,
     color="path",
     color_discrete_sequence=["#cd00fc", "#d9fd51"]
@@ -363,7 +363,7 @@ fig_donut3 = px.pie(
     df_path_summary,
     names="path",
     values="transfers_volume_usd",
-    title="💵 Total Volume of Interchain Transfers By Path ($USD)",
+    title="Total Volume of Interchain Transfers By Path ($USD)",
     hole=0.4,
     color="path",
     color_discrete_sequence=["#cd00fc", "#d9fd51"]
