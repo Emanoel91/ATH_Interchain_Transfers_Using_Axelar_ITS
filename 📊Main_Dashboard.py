@@ -273,7 +273,6 @@ df_timeseries = load_transfer_timeseries(start_date, end_date, timeframe)
 df_path_summary = load_path_summary(start_date, end_date)
 df_volume_distribution = load_transfer_volume_distribution(start_date, end_date, timeframe)
 df_volume_distribution_total = load_transfer_volume_distribution_total(start_date, end_date)
-transfer_data = load_ath_interchain_transfers(start_date, end_date)
 transfer_table = load_transfer_table(start_date, end_date)
 # ------------------------------------------------------------------------------------------------------
 
